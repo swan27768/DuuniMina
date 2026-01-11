@@ -629,6 +629,172 @@ button:focus-visible {
   color: #1F3A5F;
   outline: 3px solid #1F3A5F;
 }
+/* Yhtenäistää ResultView-tulosten yläasennon */
+.result-view h2,
+.result-view h3,
+.result-view p {
+  margin-top: 6px;
+  margin-bottom: 8px;
+}
+
+/* Lukitaan kaikkien motive-näkymien aloituskohta samaksi */
+body[class^="motive-"] .result-view {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Poistaa mahdolliset hero/taustatyönnöt */
+body[class^="motive-"] .print-card {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+.result-view { max-width: 760px; margin: 0 auto; padding-top: 12px; }
+
+.print-card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px 26px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.12);
+}
+
+.lead { font-size: 1.05em; }
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.job-list li { margin-bottom: 6px; }
+
+@media (max-width:700px){
+  .result-grid { grid-template-columns:1fr; }
+}
+.profile-block {
+  text-align: left;
+  grid-column: 1;        /* pakottaa vasempaan sarakkeeseen */
+}
+/* Ultra-kompakti ResultView */
+
+.result-view {
+  padding-top: 0 !important;
+}
+
+.print-card {
+  padding: 10px 14px !important;
+  border-radius: 14px;
+}
+
+.result-view h3 {
+  margin: 0 0 4px 0 !important;
+  line-height: 1.15;
+}
+
+.result-view .lead {
+  margin: 0 0 6px 0 !important;
+  font-size: 0.95em;
+}
+
+.result-grid {
+  gap: 10px;
+}
+
+.result-view h4 {
+  margin: 6px 0 2px 0 !important;
+}
+
+.result-view p {
+  margin: 2px 0 !important;
+}
+
+.job-list li {
+  margin-bottom: 3px;
+}
+
+.action-row a {
+  padding: 8px 12px;
+}
+/* Motive-banneri */
+
+.motive-banner {
+  display: flex;
+  justify-content: center;   /* vaakasuora keskitys */
+  align-items: center;       /* pystysuora keskitys */
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  padding: 14px 20px;
+  margin: -10px -14px 10px -14px;
+  border-radius: 14px 14px 0 0;
+  color: white;
+  box-sizing: border-box;
+}
+
+.motive-label {
+  display: block;
+  text-align: center !important;
+  width: 100%;
+  font-size: 1.2em;
+}
+
+/* Värit motiveittain */
+body.motive-Luoda .motive-banner { background:#e17055; }
+body.motive-Auttaa .motive-banner { background:#00b894; }
+body.motive-Vaikuttaa .motive-banner { background:#0984e3; }
+body.motive-Ymmartaa .motive-banner { background:#6c5ce7; }
+body.motive-Yhdistaa .motive-banner { background:#fdcb6e; color:#333; }
+body.motive-Turvata .motive-banner { background:#636e72; }
+
+
+
+/* Motive-bannerin sisätila */
+
+.motive-banner {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.motive-label {
+  display: block;
+  text-align: left;
+}
+.support-block {
+  grid-column: 1 / -1;   /* venyy koko kortin levyiseksi */
+}
+.job-cards {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap:14px;
+  margin-top:6px;
+}
+
+.job-card {
+  background:#eef2fb;
+  border-radius:14px;
+  padding:12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+}
+
+.job-card small { color:#555; }
+.path-cards {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap:16px;
+  margin-top:12px;
+}
+
+.path-card {
+  background:#ffffff;
+  border-radius:14px;
+  padding:14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+.edu-box {
+  background:#f0f4ff;
+  border-radius:14px;
+  padding:14px;
+  margin:12px 0;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">/* ========= NAVBAR ========= */
 $(document).on(":passagestart", function (event) {
   if (!event || !event.passage) return;
@@ -760,6 +926,15 @@ Engine.play(&quot;start&quot;);
 &lt;&lt;set $luo to 0&gt;&gt;
 &lt;&lt;set $huol to 0&gt;&gt;
 &lt;&lt;set $log to 0&gt;&gt;
+
+&lt;&lt;set $myPaths = []&gt;&gt;
+&lt;&lt;set $eduPaths = []&gt;&gt;
+:
+&lt;&lt;unset $eduPaths&gt;&gt;
+&lt;&lt;unset $jobs&gt;&gt;
+&lt;&lt;unset $jobTriples&gt;&gt;
+&lt;&lt;unset $myPaths&gt;&gt;
+&lt;&lt;unset $recalc&gt;&gt;
 </tw-passagedata><tw-passagedata pid="2" name="Kansi" tags="" position="475,175" size="100,100">&lt;&lt;script&gt;&gt;
 $(&#39;body&#39;).removeClass(&#39;hide-navbar&#39;);
 &lt;&lt;/script&gt;&gt;
@@ -910,7 +1085,8 @@ onclick=&quot;SugarCube.State.variables.log += 1; SugarCube.Engine.play(&#39;Res
 &lt;/button&gt;
 
 &lt;/div&gt;
-</tw-passagedata><tw-passagedata pid="7" name="Result" tags="" position="475,800" size="100,100">&lt;&lt;include &quot;ResultCalc&quot;&gt;&gt;
+</tw-passagedata><tw-passagedata pid="7" name="Result" tags="" position="475,800" size="100,100">&lt;&lt;goto &quot;ResultCalc&quot;&gt;&gt;
+
 &lt;&lt;goto &quot;ResultView&quot;&gt;&gt;
 
 
@@ -1413,193 +1589,90 @@ onclick=&quot;SugarCube.State.variables.log += 1; SugarCube.Engine.play(&#39;Res
 
 
 &lt;/div&gt;
-</tw-passagedata><tw-passagedata pid="20" name="ResultCalc" tags="" position="625,800" size="100,100">&lt;&lt;set $skill1 to &quot;Kieli&quot;&gt;&gt;
-&lt;&lt;set $skill2 to &quot;Sosiaalisuus&quot;&gt;&gt;
+</tw-passagedata><tw-passagedata pid="20" name="ResultView" tags="" position="350,800" size="100,100">&lt;&lt;run document.body.className = &quot;motive-&quot; + $motive.replace(/ä/g,&quot;a&quot;).replace(/ö/g,&quot;o&quot;) &gt;&gt;
+&lt;&lt;run console.log(&quot;RECALC:&quot;, $recalc, $jobs, $eduPaths)&gt;&gt;
 
-&lt;&lt;if $sos &gt; $kieli &amp;&amp; $sos &gt;= $jarj &amp;&amp; $sos &gt;= $luo &amp;&amp; $sos &gt;= $huol &amp;&amp; $sos &gt;= $log&gt;&gt;
-  &lt;&lt;set $skill1 to &quot;Sosiaalisuus&quot;&gt;&gt;
-  &lt;&lt;set $skill2 to &quot;Kieli&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $jarj &gt; $kieli &amp;&amp; $jarj &gt; $sos &amp;&amp; $jarj &gt;= $luo &amp;&amp; $jarj &gt;= $huol &amp;&amp; $jarj &gt;= $log&gt;&gt;
-  &lt;&lt;set $skill1 to &quot;Järjestelmä&quot;&gt;&gt;
-  &lt;&lt;set $skill2 to &quot;Logiikka&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $luo &gt; $kieli &amp;&amp; $luo &gt; $sos &amp;&amp; $luo &gt; $jarj &amp;&amp; $luo &gt;= $huol &amp;&amp; $luo &gt;= $log&gt;&gt;
-  &lt;&lt;set $skill1 to &quot;Luovuus&quot;&gt;&gt;
-  &lt;&lt;set $skill2 to &quot;Kieli&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $huol &gt; $kieli &amp;&amp; $huol &gt; $sos &amp;&amp; $huol &gt; $jarj &amp;&amp; $huol &gt;= $luo &amp;&amp; $huol &gt;= $log&gt;&gt;
-  &lt;&lt;set $skill1 to &quot;Huolenpito&quot;&gt;&gt;
-  &lt;&lt;set $skill2 to &quot;Sosiaalisuus&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $log &gt; $kieli &amp;&amp; $log &gt; $sos &amp;&amp; $log &gt; $jarj &amp;&amp; $log &gt; $luo &amp;&amp; $log &gt;= $huol&gt;&gt;
-  &lt;&lt;set $skill1 to &quot;Logiikka&quot;&gt;&gt;
-  &lt;&lt;set $skill2 to &quot;Järjestelmä&quot;&gt;&gt;
+&lt;&lt;if $myPaths === undefined&gt;&gt;
+  &lt;&lt;set $myPaths = []&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 
 
-&lt;&lt;set $direction to &quot;Ulospäin - jaksat parhaiten ihmisten kanssa&quot;&gt;&gt;
-
-&lt;&lt;if $in &gt; $out &amp;&amp; $in &gt;= $move &amp;&amp; $in &gt;= $stable&gt;&gt;
-  &lt;&lt;set $direction to &quot;Sisäänpäin - tarvitset omaa rauhaa&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $move &gt; $out &amp;&amp; $move &gt; $in &amp;&amp; $move &gt;= $stable&gt;&gt;
-  &lt;&lt;set $direction to &quot;Liikkuva - tarvitset vaihtelua ja tekemistä&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $stable &gt; $out &amp;&amp; $stable &gt; $in &amp;&amp; $stable &gt; $move&gt;&gt;
-  &lt;&lt;set $direction to &quot;Vakaa - tarvitset selkeät rutiinit&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;set $direction_text to &quot;&quot;&gt;&gt;
-
-&lt;&lt;if $direction is &quot;Ulospäin - jaksat parhaiten ihmisten kanssa&quot;&gt;&gt;
-  &lt;&lt;set $direction_text to &quot;Muista, että jaksat parhaiten ihmisten kanssa ja vuorovaikutuksessa.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $direction is &quot;Sisäänpäin - tarvitset omaa rauhaa&quot;&gt;&gt;
-  &lt;&lt;set $direction_text to &quot;Muista, että tarvitset omaa rauhaa ja aikaa keskittyäksesi.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $direction is &quot;Liikkuva - tarvitset vaihtelua ja tekemistä&quot;&gt;&gt;
-  &lt;&lt;set $direction_text to &quot;Muista, että tarvitset vaihtelua, liikettä ja tekemistä jaksamiseen.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $direction is &quot;Vakaa - tarvitset selkeät rutiinit&quot;&gt;&gt;
-  &lt;&lt;set $direction_text to &quot;Muista, että selkeät rutiinit ja ennakoitavat aikataulut tukevat jaksamistasi.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-
-&lt;&lt;set $risk to &quot;&quot;&gt;&gt;
-&lt;&lt;set $support to &quot;&quot;&gt;&gt;
-
-&lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;
-  &lt;&lt;set $risk to &quot;Väsyt, jos autat liikaa muita ja unohdat oman jaksamisen.&quot;&gt;&gt;
-  &lt;&lt;set $support to &quot;Muista omat rajat ja oma aika.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;
-  &lt;&lt;set $risk to &quot;Kuormitut, jos et saa vaikuttaa tai sinua ei kuunnella.&quot;&gt;&gt;
-  &lt;&lt;set $support to &quot;Saat energiaa vastuusta ja siitä, että mielipidettäsi kuunnellaan.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;
-  &lt;&lt;set $risk to &quot;Väsyt, jos asiat ovat epäselviä tai muuttuvat koko ajan.&quot;&gt;&gt;
-  &lt;&lt;set $support to &quot;Saat voimaa rauhasta ja ajattelun ajasta.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $motive is &quot;Luoda&quot;&gt;&gt;
-  &lt;&lt;set $risk to &quot;Kuormitut, jos et saa käyttää luovuutta tai jos sinua kontrolloidaan liikaa.&quot;&gt;&gt;
-  &lt;&lt;set $support to &quot;Saat energiaa, kun saat tehdä omannäköisiä juttuja.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $motive is &quot;Yhdistää&quot;&gt;&gt;
-  &lt;&lt;set $risk to &quot;Väsyt, jos ilmapiiri on huono tai olet yksin.&quot;&gt;&gt;
-  &lt;&lt;set $support to &quot;Saat voimaa hyvästä ilmapiiristä ja porukasta.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $motive is &quot;Turvata&quot;&gt;&gt;
-  &lt;&lt;set $risk to &quot;Kuormitut, jos asiat ovat epäselviä tai turvattomia.&quot;&gt;&gt;
-  &lt;&lt;set $support to &quot;Saat turvaa selkeistä säännöistä ja rutiineista.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-</tw-passagedata><tw-passagedata pid="21" name="ResultView" tags="" position="350,800" size="100,100">&lt;&lt;run document.body.className = &quot;motive-&quot; + $motive.replace(/ä/g,&quot;a&quot;).replace(/ö/g,&quot;o&quot;) &gt;&gt;
+&lt;div class=&quot;result-view&quot;&gt;
 &lt;div class=&quot;print-card&quot;&gt;
+&lt;div class=&quot;motive-banner&quot;&gt;
+  &lt;span class=&quot;motive-label&quot;&gt;
+    &lt;&lt;if $motive is &quot;Luoda&quot;&gt;&gt;Sinä olet luova tekijä&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;Sinä olet välittävä tekijä&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;Sinä olet rohkea tekijä&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;Sinä olet ajatteleva tekijä&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if $motive is &quot;Yhdistää&quot;&gt;&gt;Sinä olet ihmisläheinen tekijä&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if $motive is &quot;Turvata&quot;&gt;&gt;Sinä olet luotettava tekijä&lt;&lt;/if&gt;&gt;
+  &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;p class=&quot;lead&quot;&gt;
 &lt;&lt;if $motive is &quot;Luoda&quot;&gt;&gt;
-&lt;h3&gt;Sinä olet luova tekijä&lt;/h3&gt;
-
-&lt;p&gt;Olet luova, idearikas ja utelias. Saat nopeasti uusia ideoita ja innostut, kun saat tehdä näkyviä tai omannäköisiä juttuja. Kyllästyt helposti, jos kaikki on liian tarkasti määrättyä, ja opit parhaiten tekemällä ja kokeilemalla.&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;Luontainen roolisi on:&lt;/b&gt; $role&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Sinun vahvuutesi:&lt;/b&gt; $skill1 ja $skill2&lt;/p&gt;
-&lt;p&gt;$direction_text&lt;/p&gt;
-
-&lt;h3&gt;Mikä voi väsyttää sinua&lt;/h3&gt;
-&lt;p&gt;$risk&lt;/p&gt;
-
-&lt;h3&gt;Mikä auttaa sinua jaksamaan&lt;/h3&gt;
-&lt;p&gt;$support&lt;/p&gt;
+Olet luova, idearikas ja utelias. Saat nopeasti uusia ideoita ja innostut, kun saat tehdä näkyviä tai omannäköisiä juttuja.
 &lt;&lt;/if&gt;&gt;
-
 &lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;
-&lt;h3&gt;Sinä olet välittävä tekijä&lt;/h3&gt;
-
-&lt;p&gt;Olet empaattinen ja huomioit helposti muiden tarpeet. Sinusta tuntuu hyvältä, kun voit auttaa muita. Jaksat kuunnella, tukea ja tehdä asioita toisten hyväksi.&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;Luontainen roolisi on:&lt;/b&gt; $role&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Sinun vahvuutesi:&lt;/b&gt; $skill1 ja $skill2&lt;/p&gt;
-&lt;p&gt;$direction_text&lt;/p&gt;
-
-
-&lt;h3&gt;Mikä voi väsyttää sinua&lt;/h3&gt;
-&lt;p&gt;$risk&lt;/p&gt;
-
-&lt;h3&gt;Mikä auttaa sinua jaksamaan&lt;/h3&gt;
-&lt;p&gt;$support&lt;/p&gt;
+Olet empaattinen ja huomioit helposti muiden tarpeet. Sinusta tuntuu hyvältä, kun voit auttaa muita.
 &lt;&lt;/if&gt;&gt;
-
 &lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;
-&lt;h3&gt;Sinä olet rohkea tekijä&lt;/h3&gt;
-
-&lt;p&gt;Olet rohkea ja aloitteellinen. Haluat viedä asioita eteenpäin ja vaikuttaa siihen, miten asiat tehdään. Innostut vastuusta ja haasteista.&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;Luontainen roolisi on:&lt;/b&gt; $role&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Sinun vahvuutesi:&lt;/b&gt; $skill1 ja $skill2&lt;/p&gt;
-&lt;p&gt;$direction_text&lt;/p&gt;
-
-&lt;h3&gt;Mikä voi väsyttää sinua&lt;/h3&gt;
-&lt;p&gt;$risk&lt;/p&gt;
-
-&lt;h3&gt;Mikä auttaa sinua jaksamaan&lt;/h3&gt;
-&lt;p&gt;$support&lt;/p&gt;
+Olet rohkea ja aloitteellinen. Haluat viedä asioita eteenpäin ja vaikuttaa siihen, miten asiat tehdään.
 &lt;&lt;/if&gt;&gt;
-
 &lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;
-&lt;h3&gt;Sinä olet ajatteleva tekijä&lt;/h3&gt;
-
-&lt;p&gt;Pidät siitä, että asiat ovat selkeitä ja ymmärrettäviä. Haluat tietää, miten asiat toimivat ja miksi. Olet huolellinen ja ajattelet ennen kuin toimit.&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;Luontainen roolisi on:&lt;/b&gt; $role&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Sinun vahvuutesi:&lt;/b&gt; $skill1 ja $skill2&lt;/p&gt;
-&lt;p&gt;$direction_text&lt;/p&gt;
-
-&lt;h3&gt;Mikä voi väsyttää sinua&lt;/h3&gt;
-&lt;p&gt;$risk&lt;/p&gt;
-
-&lt;h3&gt;Mikä auttaa sinua jaksamaan&lt;/h3&gt;
-&lt;p&gt;$support&lt;/p&gt;
+Pidät siitä, että asiat ovat selkeitä ja ymmärrettäviä. Haluat tietää, miten asiat toimivat ja miksi.
 &lt;&lt;/if&gt;&gt;
-
-
 &lt;&lt;if $motive is &quot;Yhdistää&quot;&gt;&gt;
-&lt;h3&gt;Sinä olet ihmisläheinen tekijä&lt;/h3&gt;
-
-&lt;p&gt;Olet sosiaalinen ja huomioit ilmapiirin. Saat ihmiset viihtymään ja tunnet olosi kotoisaksi ryhmissä.&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;Luontainen roolisi on:&lt;/b&gt; $role&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Sinun vahvuutesi:&lt;/b&gt; $skill1 ja $skill2&lt;/p&gt;
-&lt;p&gt;$direction_text&lt;/p&gt;
-
-&lt;h3&gt;Mikä voi väsyttää sinua&lt;/h3&gt;
-&lt;p&gt;$risk&lt;/p&gt;
-
-&lt;h3&gt;Mikä auttaa sinua jaksamaan&lt;/h3&gt;
-&lt;p&gt;$support&lt;/p&gt;
+Olet sosiaalinen ja huomioit ilmapiirin. Saat ihmiset viihtymään ja tunnet olosi kotoisaksi ryhmissä.
 &lt;&lt;/if&gt;&gt;
-
 &lt;&lt;if $motive is &quot;Turvata&quot;&gt;&gt;
-&lt;h3&gt;Sinä olet luotettava tekijä&lt;/h3&gt;
-
-&lt;p&gt;Olet luotettava ja järjestelmällinen. Sinulle on tärkeää, että asiat tehdään huolellisesti..&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;Luontainen roolisi on:&lt;/b&gt; $role&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Sinun vahvuutesi:&lt;/b&gt; $skill1 ja $skill2&lt;/p&gt;
-&lt;p&gt;$direction_text&lt;/p&gt;
-
-&lt;h3&gt;Mikä voi väsyttää sinua&lt;/h3&gt;
-&lt;p&gt;$risk&lt;/p&gt;
-
-&lt;h3&gt;Mikä auttaa sinua jaksamaan&lt;/h3&gt;
-&lt;p&gt;$support&lt;/p&gt;
+Olet luotettava ja järjestelmällinen. Sinulle on tärkeää, että asiat tehdään huolellisesti.
 &lt;&lt;/if&gt;&gt;
+&lt;/p&gt;
 
-&lt;div class=&quot;no-print&quot;&gt;
+&lt;div class=&quot;result-grid&quot;&gt;
+
+&lt;div class=&quot;support-block&quot;&gt;
+  &lt;p&gt;&lt;b&gt;Luontainen roolisi:&lt;/b&gt;&lt;br&gt;$role&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Vahvuutesi:&lt;/b&gt;&lt;br&gt;&lt;&lt;print $skill1&gt;&gt; ja &lt;&lt;print $skill2&gt;&gt;&lt;/p&gt;
+
+  &lt;p&gt;$direction_text&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div class=&quot;support-block&quot;&gt;
+  &lt;h4&gt;Mikä voi väsyttää&lt;/h4&gt;
+  &lt;p&gt;$risk&lt;/p&gt;
+
+  &lt;h4&gt;Mikä auttaa jaksamaan&lt;/h4&gt;
+  &lt;p&gt;$support&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;/div&gt;
+
+&lt;h4&gt;Kolme mahdollista suuntaa sinulle&lt;/h4&gt;
+
+&lt;div class=&quot;job-cards&quot;&gt;
+&lt;&lt;for _j range $jobTriples&gt;&gt;
+  &lt;&lt;capture _j&gt;&gt;
+    &lt;div class=&quot;job-card&quot;&gt;
+      &lt;b&gt;_j&lt;/b&gt;
+            &lt;&lt;link &quot;Valitse tämä suunta&quot;&gt;&gt;
+        &lt;&lt;set $myPaths = [{ label:_j }]&gt;&gt;
+        &lt;&lt;goto &quot;MyPaths&quot;&gt;&gt;
+      &lt;&lt;/link&gt;&gt;
+    &lt;/div&gt;
+  &lt;&lt;/capture&gt;&gt;
+&lt;&lt;/for&gt;&gt;
+&lt;/div&gt;
+
+       
+&lt;div id=&quot;myPathsInfo&quot;&gt;&lt;/div&gt;
+[[Minun polkuni|MyPaths]]
+
+&lt;div class=&quot;no-print action-row&quot;&gt;
   &lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;&lt;&lt;link &quot;Ammattikortit&quot;&gt;&gt;&lt;&lt;goto &quot;Card_Auttaa&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;&lt;/if&gt;&gt;
   &lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;&lt;&lt;link &quot;Ammattikortit&quot;&gt;&gt;&lt;&lt;goto &quot;Card_Vaikuttaa&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;&lt;/if&gt;&gt;
   &lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;&lt;&lt;link &quot;Ammattikortit&quot;&gt;&gt;&lt;&lt;goto &quot;Card_Ymmartaa&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;&lt;/if&gt;&gt;
@@ -1610,11 +1683,295 @@ onclick=&quot;SugarCube.State.variables.log += 1; SugarCube.Engine.play(&#39;Res
   &lt;&lt;link &quot;Takaisin tulokseen&quot;&gt;&gt;&lt;&lt;goto &quot;Result&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 &lt;/div&gt;
 
+&lt;/div&gt;
+&lt;/div&gt;
+</tw-passagedata><tw-passagedata pid="21" name="MyPaths" tags="" position="800,800" size="100,100">&lt;&lt;if !$myPaths&gt;&gt;
+  &lt;&lt;set $myPaths = []&gt;&gt;
+&lt;&lt;/if&gt;&gt;
 
+&lt;h2&gt;Minun polkuni&lt;/h2&gt;
+
+&lt;&lt;if $myPaths.length is 0&gt;&gt;
+&lt;p&gt;Et ole vielä valinnut suuntaa.&lt;/p&gt;
+[[Takaisin tuloksiin|Result]]
+&lt;&lt;else&gt;&gt;
+
+&lt;!-- 1) OMA SUUNTA ENSIN --&gt;
+&lt;div class=&quot;path-cards&quot;&gt;
+  &lt;div class=&quot;path-card&quot;&gt;
+    &lt;h4&gt;$myPaths[0].label&lt;/h4&gt;
+    &lt;p&gt;
+      Tämä suunta sopii sinulle, koska se tukee sinun työminääsi,
+      vahvuuksiasi &lt;&lt;print $skill1&gt;&gt; ja &lt;&lt;print $skill2&gt;&gt; sekä työrytmiäsi.
+    &lt;/p&gt;
+    &lt;&lt;link &quot;Vaihda suuntaa&quot;&gt;&gt;&lt;&lt;goto &quot;ResultView&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+  &lt;/div&gt;
 &lt;/div&gt;
 
+&lt;!-- 2) KOULUTUSPOLUT (laske ensin, tulosta sitten) --&gt;
+&lt;&lt;set $eduPaths = []&gt;&gt;
 
+&lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Lähihoitajan perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Kasvatus- ja ohjausalan perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Sosionomi (AMK)&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Luoda&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Media-alan perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Visuaalisen viestinnän perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Muotoilija (AMK)&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Tieto- ja viestintätekniikan perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Tietotekniikan insinööri (AMK)&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Markkinointiviestinnän perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Tradenomi (AMK)&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Yhdistää&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Matkailualan perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Tapahtumatuotannon koulutus&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Turvata&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Rakennusalan perustutkinto&quot;)&gt;&gt;
+  &lt;&lt;set $eduPaths.push(&quot;Sähkö- ja automaatioalan perustutkinto&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $eduPaths &amp;&amp; $eduPaths.length &gt; 0&gt;&gt;
+&lt;div class=&quot;edu-box&quot;&gt;
+  &lt;h3&gt;Mahdollisia koulutuspolkuja tähän suuntaan&lt;/h3&gt;
+  &lt;ul&gt;
+  &lt;&lt;for _e range $eduPaths&gt;&gt;
+    &lt;li&gt;_e&lt;/li&gt;
+  &lt;&lt;/for&gt;&gt;
+  &lt;/ul&gt;
 &lt;/div&gt;
+&lt;&lt;/if&gt;&gt;
+
+[[Takaisin tulokseen|Result]]
+&lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="22" name="ResultCalc" tags="" position="650,800" size="100,100">
+&lt;&lt;unset $jobs&gt;&gt;
+&lt;&lt;unset $jobTriples&gt;&gt;
+&lt;&lt;unset $eduPaths&gt;&gt;
+&lt;&lt;set $jobs = []&gt;&gt;
+&lt;&lt;set $jobTriples = []&gt;&gt;
+&lt;&lt;set $eduPaths = []&gt;&gt;
+
+
+/* =========================
+   TURVA-ALUSTUKSET
+========================= */
+
+&lt;&lt;if !$workWith&gt;&gt;&lt;&lt;set $workWith = []&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if !$myPaths&gt;&gt;&lt;&lt;set $myPaths = []&gt;&gt;&lt;&lt;/if&gt;&gt;
+
+/* =========================
+   VAHVUUKSIEN LASKENTA
+========================= */
+
+&lt;&lt;set $maxSkill = Math.max($kieli,$sos,$jarj,$luo,$huol,$log)&gt;&gt;
+
+&lt;&lt;if $sos is $maxSkill&gt;&gt;
+  &lt;&lt;set $skill1 = &quot;Sosiaalisuus&quot;&gt;&gt;
+  &lt;&lt;set $skill2 = &quot;Kieli&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $jarj is $maxSkill&gt;&gt;
+  &lt;&lt;set $skill1 = &quot;Järjestelmä&quot;&gt;&gt;
+  &lt;&lt;set $skill2 = &quot;Logiikka&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $luo is $maxSkill&gt;&gt;
+  &lt;&lt;set $skill1 = &quot;Luovuus&quot;&gt;&gt;
+  &lt;&lt;set $skill2 = &quot;Kieli&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $huol is $maxSkill&gt;&gt;
+  &lt;&lt;set $skill1 = &quot;Huolenpito&quot;&gt;&gt;
+  &lt;&lt;set $skill2 = &quot;Sosiaalisuus&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $log is $maxSkill&gt;&gt;
+  &lt;&lt;set $skill1 = &quot;Logiikka&quot;&gt;&gt;
+  &lt;&lt;set $skill2 = &quot;Järjestelmä&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+/* =========================
+   JAKSAMISSUUNTA
+========================= */
+
+&lt;&lt;set $maxDir = Math.max($out,$in,$move,$stable)&gt;&gt;
+
+&lt;&lt;if $out is $maxDir&gt;&gt;&lt;&lt;set $direction = &quot;Ulospäin – jaksat parhaiten ihmisten kanssa&quot;&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $in is $maxDir&gt;&gt;&lt;&lt;set $direction = &quot;Sisäänpäin – tarvitset omaa rauhaa&quot;&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $move is $maxDir&gt;&gt;&lt;&lt;set $direction = &quot;Liikkuva – tarvitset vaihtelua ja tekemistä&quot;&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $stable is $maxDir&gt;&gt;&lt;&lt;set $direction = &quot;Vakaa – tarvitset selkeät rutiinit&quot;&gt;&gt;&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;set $direction_text = &quot;Muista, että &quot; + $direction + &quot;.&quot;&gt;&gt;
+
+/* =========================
+   MOTIIVIKOHTAISET RISKIT
+========================= */
+
+&lt;&lt;set $risk = &quot;&quot;&gt;&gt;
+&lt;&lt;set $support = &quot;&quot;&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;
+  &lt;&lt;set $risk = &quot;Väsyt, jos autat liikaa muita ja unohdat oman jaksamisen.&quot;&gt;&gt;
+  &lt;&lt;set $support = &quot;Muista omat rajat ja oma aika.&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;
+  &lt;&lt;set $risk = &quot;Kuormitut, jos et saa vaikuttaa tai sinua ei kuunnella.&quot;&gt;&gt;
+  &lt;&lt;set $support = &quot;Saat energiaa vastuusta ja siitä, että mielipidettäsi kuunnellaan.&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;
+  &lt;&lt;set $risk = &quot;Väsyt, jos asiat ovat epäselviä tai muuttuvat koko ajan.&quot;&gt;&gt;
+  &lt;&lt;set $support = &quot;Saat voimaa rauhasta ja ajattelun ajasta.&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $motive is &quot;Luoda&quot;&gt;&gt;
+  &lt;&lt;set $risk = &quot;Kuormitut, jos et saa käyttää luovuutta tai jos sinua kontrolloidaan liikaa.&quot;&gt;&gt;
+  &lt;&lt;set $support = &quot;Saat energiaa, kun saat tehdä omannäköisiä juttuja.&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $motive is &quot;Yhdistää&quot;&gt;&gt;
+  &lt;&lt;set $risk = &quot;Väsyt, jos ilmapiiri on huono tai olet yksin.&quot;&gt;&gt;
+  &lt;&lt;set $support = &quot;Saat voimaa hyvästä ilmapiiristä ja porukasta.&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $motive is &quot;Turvata&quot;&gt;&gt;
+  &lt;&lt;set $risk = &quot;Kuormitut, jos asiat ovat epäselviä tai turvattomia.&quot;&gt;&gt;
+  &lt;&lt;set $support = &quot;Saat turvaa selkeistä säännöistä ja rutiineista.&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+/* =========================
+   TYÖSUUNNAT (ydin + naapurit)
+========================= */
+
+&lt;&lt;set $jobs = []&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Hoiva- ja tukityö&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Ohjaus- ja valmennustyö&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Humanistinen ja yhteiskunnallinen työ&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Asiakaspalvelu ja myyntityö&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Järjestö- ja projektityö&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Luoda&quot;&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Luova sisältö ja media&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Muotoilu ja ideointi&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Viestintä ja markkinointi&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Tapahtumatuotanto&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Yrittäjämäinen projektityö&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Tutkiva ja analyyttinen työ&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;IT ja data&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Tekninen asiantuntijatyö&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Taloushallinto ja suunnittelu&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Strateginen kehittäminen&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Myynti ja neuvottelu&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Viestintä ja kampanjointi&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Esihenkilö- ja tiiminvetotyö&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Yrittäjyys&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Yhteiskunnallinen vaikuttaminen&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Yhdistää&quot;&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Tiimi- ja yhteisötyö&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Asiakaspalvelu&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;HR ja rekrytointi&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Myynti ja tapahtumat&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Ryhmänohjaus&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Turvata&quot;&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Kunnossapito ja turvallisuus&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Logistiikka ja varastointi&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Tekninen huolto&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Prosessiteollisuus&quot;)&gt;&gt;
+  &lt;&lt;set $jobs.push(&quot;Pelastus- ja vartiointiala&quot;)&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+/* =========================
+   LUKITUT 3 SUUNTAA
+========================= */
+
+&lt;&lt;set $jobTriples = []&gt;&gt;
+&lt;&lt;if $jobs.length &gt;= 1&gt;&gt;&lt;&lt;set $jobTriples = $jobTriples.concat([$jobs[0]])&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $jobs.length &gt;= 2&gt;&gt;&lt;&lt;set $jobTriples = $jobTriples.concat([$jobs[1]])&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $jobs.length &gt;= 3&gt;&gt;&lt;&lt;set $jobTriples = $jobTriples.concat([$jobs[2]])&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $jobs.length &gt;= 4&gt;&gt;&lt;&lt;set $jobTriples = $jobTriples.concat([$jobs[3]])&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $jobs.length &gt;= 5&gt;&gt;&lt;&lt;set $jobTriples = $jobTriples.concat([$jobs[4]])&gt;&gt;&lt;&lt;/if&gt;&gt;
+
+/* =========================
+   OPH-POHJAISET KOULUTUSPOLUT
+========================= */
+
+&lt;&lt;set $eduPaths = []&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Auttaa&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths = $eduPaths.concat([
+    &quot;Sosiaali- ja terveysalan perustutkinto&quot;,
+    &quot;Kasvatus- ja ohjausalan perustutkinto&quot;,
+    &quot;Lääkealan perustutkinto&quot;,
+    &quot;Välinehuoltoalan perustutkinto&quot;
+  ])&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Luoda&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths = $eduPaths.concat([
+    &quot;Media-alan ja kuvallisen ilmaisun perustutkinto&quot;,
+    &quot;Taideteollisuusalan perustutkinto&quot;,
+    &quot;Tekstiili- ja muotialan perustutkinto&quot;,
+    &quot;Musiikkialan perustutkinto&quot;
+  ])&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Ymmärtää&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths = $eduPaths.concat([
+    &quot;Tieto- ja viestintätekniikan perustutkinto&quot;,
+    &quot;Laboratorioalan perustutkinto&quot;,
+    &quot;Teknisen suunnittelun perustutkinto&quot;,
+    &quot;Prosessiteollisuuden perustutkinto&quot;
+  ])&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Vaikuttaa&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths = $eduPaths.concat([
+    &quot;Liiketoiminnan perustutkinto&quot;,
+    &quot;Media-alan ja kuvallisen ilmaisun perustutkinto&quot;,
+    &quot;Matkailualan perustutkinto&quot;
+  ])&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Yhdistää&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths = $eduPaths.concat([
+    &quot;Matkailualan perustutkinto&quot;,
+    &quot;Liiketoiminnan perustutkinto&quot;,
+    &quot;Logistiikan perustutkinto&quot;,
+    &quot;Kasvatus- ja ohjausalan perustutkinto&quot;
+  ])&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if $motive is &quot;Turvata&quot;&gt;&gt;
+  &lt;&lt;set $eduPaths = $eduPaths.concat([
+    &quot;Sähkö- ja automaatioalan perustutkinto&quot;,
+    &quot;Rakennusalan perustutkinto&quot;,
+    &quot;Talotekniikan perustutkinto&quot;,
+    &quot;Prosessiteollisuuden perustutkinto&quot;
+  ])&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+
+&lt;&lt;set $recalc = (State.variables.recalc || 0) + 1&gt;&gt;
+
+&lt;&lt;goto &quot;ResultView&quot;&gt;&gt;
 </tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
