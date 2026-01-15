@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<title>DuuniMinä</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="app">
+
+  <section id="start" class="start-screen">
+
+  <img src="img/duunimina-hero.png"
+       alt="DuuniMinä – eri työtyyppejä kuvaava kuvitus"
+       class="hero-image">
+
+  <h1>DuuniMinä</h1>
+
+  <p class="intro">
+    Löydä oma työtyylisi ja vahvuutesi.  
+    DuuniMinä auttaa sinua ymmärtämään, millaisessa tekemisessä voit parhaiten.
+  </p>
+
+  <button onclick="startTest()" class="start-btn">
+    Aloita testi
+  </button>
+
+</section>
+
+
+  <section id="test" class="hidden"></section>
+  <section id="result" class="hidden"></section>
+
+</div>
+
+
+<script src="js/content.js"></script>
+<script src="js/data.js"></script>   
+<script src="js/engine.js"></script>
+<script src="js/ui.js"></script>
+
+</body>
+</html>

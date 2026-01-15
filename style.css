@@ -1,0 +1,222 @@
+/* ============================================================
+   DUUNIMINÄ – ACCESSIBLE PROFESSIONAL UI
+   WCAG 2.1 AA COMPLIANT
+   ============================================================ */
+
+:root{
+  --bg:#F7F9FC;
+  --card:#FFFFFF;
+  --text:#0F172A;
+  --muted:#334155;
+  --border:#CBD5E1;
+  --primary:#0B3A6F;
+  --primary-hover:#0A2F58;
+  --accent:#F59E0B;
+  --radius:18px;
+}
+
+/* Reset */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font:18px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+}
+
+/* Visibility */
+.hidden{display:none!important}
+
+/* Layout */
+#app{
+  max-width:860px;
+  margin:auto;
+  padding:22px;
+}
+
+/* Headings */
+h1,h2,h3{
+  margin:.4em 0;
+  letter-spacing:.04em;
+}
+
+/* Card containers */
+.result-card,.question{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 12px 34px rgba(0,0,0,.08);
+  padding:24px;
+  margin-top:22px;
+}
+
+/* Buttons */
+button{
+  width:100%;
+  padding:16px;
+  margin:10px 0;
+  border-radius:14px;
+  border:2px solid transparent;
+  background:var(--primary);
+  color:white;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+button:hover{background:var(--primary-hover)}
+
+button:focus-visible{
+  outline:4px solid var(--accent);
+  outline-offset:4px;
+}
+
+/* Likert scale */
+.likert{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
+
+@media(max-width:700px){
+  .likert{grid-template-columns:repeat(2,1fr)}
+  .likert button:last-child{grid-column:1/-1}
+}
+
+/* Interpretation highlight */
+.interpretation-box{
+  background:#EEF2F7;
+  border-left:6px solid var(--primary);
+  padding:18px;
+  border-radius:14px;
+  margin-bottom:20px;
+  font-weight:600;
+}
+
+/* Action row */
+.action-row{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+/* Text helpers */
+.lead{
+  font-size:1.05em;
+  color:var(--muted);
+}
+
+/* Print accessibility */
+@media print{
+  button,.action-row{display:none!important}
+  body{background:white;color:black}
+  .result-card{
+    box-shadow:none;
+    border:1px solid #000;
+  }
+}
+/* ============================================================
+   DUUNIMINÄ – MOBILE FIRST OPTIMIZATION
+   ============================================================ */
+
+@media (max-width: 640px){
+
+  body{
+    font-size:17px;
+    line-height:1.75;
+  }
+
+  #app{
+    padding:14px;
+  }
+
+  h1{
+    font-size:1.6rem;
+  }
+
+  h2{
+    font-size:1.4rem;
+  }
+
+  h3{
+    font-size:1.3rem;
+  }
+
+  .result-card,.question{
+    padding:18px;
+    border-radius:16px;
+  }
+
+  /* Q1 valinnat */
+  #test button{
+    padding:18px 16px;
+    font-size:1.05rem;
+    border-radius:16px;
+  }
+
+  /* Likert napit = peukaloalue */
+  .likert{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .likert button{
+    font-size:0.95rem;
+    padding:16px 12px;
+  }
+
+  .likert button:last-child{
+    grid-column:1/-1;
+    font-weight:700;
+    background:#F59E0B;
+    color:#1F2933;
+  }
+
+  /* Interpretation-box = kortin huippu */
+  .interpretation-box{
+    font-size:1rem;
+    line-height:1.6;
+    padding:16px;
+    border-radius:16px;
+  }
+
+  /* Toiminnot */
+  .action-row{
+    flex-direction:column;
+  }
+
+  .action-row button{
+    width:100%;
+    padding:18px;
+    font-size:1rem;
+  }
+
+}
+/* Keskitä tulossivun pääotsikko */
+.result-card h1{
+  text-align:center;
+}
+@media (max-width:640px){
+  .result-card h1,
+  .result-card h2,
+  .result-card h3{
+    text-align:center;
+  }
+}
+.start-box h1 {
+  text-align: center;
+  width: 100%;
+  font-size: clamp(2rem, 6vw, 3rem);
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+.start-box h1 {
+  text-align: center;
+  width: 100%;
+  font-size: clamp(2rem, 6vw, 3rem);
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
