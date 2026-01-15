@@ -224,4 +224,12 @@ button:focus-visible{
   margin-left: auto;
   margin-right: auto;
 }
+.hero-img {
+  display: block;
+  max-width: 320px;
+  width: 90%;
+  margin: 2rem auto;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
 
