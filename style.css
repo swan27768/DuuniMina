@@ -158,21 +158,23 @@ button:focus-visible{
 
   /* Likert napit = peukaloalue */
   .likert{
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-  }
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
 
-  .likert button{
-    font-size:0.95rem;
-    padding:16px 12px;
-  }
+.likert button{
+  font-size:0.95rem;
+  padding:16px 12px;
+}
 
-  .likert button:last-child{
-    grid-column:1/-1;
-    font-weight:700;
-    background:#F59E0B;
-    color:#1F2933;
-  }
+/* Poistettu erikoisväri viimeiseltä napilta */
+.likert button:last-child{
+  grid-column:1/-1;
+}
+  .likert button {
+  background: var(--primary);
+  color: white;
+}
 
   /* Interpretation-box = kortin huippu */
   .interpretation-box{
