@@ -268,5 +268,284 @@ button:focus-visible{
   text-transform:uppercase;
   margin:.6em 0 .2em;
 }
+/* INFO – vain työpöydälle */
+.desktop-only{display:inline-block}
+@media(max-width:900px){
+  .desktop-only{display:none!important}
+}
+
+/* MODAL */
+#teacherInfo{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:9999;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.info-modal{
+  background:#fff;
+  max-width:780px;
+  max-height:90vh;
+  overflow:auto;
+  border-radius:18px;
+  padding:22px;
+  line-height:1.6;
+}
+.info-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.info-header .close{
+  width:auto;
+  padding:6px 12px;
+}
+
+.info-body h3{
+  margin-top:1.2rem;
+}
+
+.info-footer{
+  margin-top:1rem;
+  padding:12px;
+  background:#f0f4ff;
+  border-radius:12px;
+}
+/* Pyöreä info-kuvake */
+.info-circle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+  border: 2px solid var(--border);
+
+  background: white;
+  color: var(--primary);
+
+  font-weight: 800;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  opacity: .75;
+  transition: .15s ease;
+}
+
+.info-circle:hover {
+  opacity: 1;
+  background: #f1f5f9;
+}
+
+/* Ei mobiiliin */
+@media (max-width:900px){
+  .info-circle { display:none!important }
+}
+
+/* Korttiin suhteellinen sijainti */
+.result-card {
+  position: relative;
+}
+function toggleInfo() {
+  const box = document.getElementById("infoBox");
+  box.classList.toggle("hidden");
+}
+/* Pieni i-painike oikeassa yläkulmassa */
+.info-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  background: #0B3A6F;
+  color: white;
+  border: none;
+
+  font-weight: bold;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  z-index: 999;
+}
+
+/* Infoboksi */
+.info-box {
+  position: fixed;
+  top: 60px;
+  right: 12px;
+  max-width: 420px;
+
+  background: #F1F5F9;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 0.95rem;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  z-index: 998;
+}
+
+.info-box.hidden {
+  display: none;
+}
+
+/* EI NÄKYVIIN MOBIILISSA */
+@media (max-width: 768px) {
+  .info-btn,
+  .info-box {
+    display: none !important;
+  }
+}
+/* OPETTAJAN INFO -MODAALI */
+
+/* Opettajille – i-info painike */
+#infoBtn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+
+  width: 36px;
+  height: 36px;
+
+  background: #ffffff;              /* valkoinen pohja */
+  color: #0B3A6F;                  /* sininen i-kirjain */
+  border: 2px solid #0B3A6F;       /* sininen kehys */
+
+  border-radius: 50%;              /* pyöreä */
+  font-weight: 700;
+  font-size: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+/* Hover – kevyt täyttö */
+#infoBtn:hover {
+  background: #EEF2F7;
+}
+
+/* Fokus saavutettavuuteen */
+#infoBtn:focus-visible {
+  outline: 3px solid #F59E0B;
+  outline-offset: 2px;
+}
+
+/* Ei mobiilissa */
+@media (max-width: 768px) {
+  #infoBtn {
+    display: none !important;
+  }
+}
+
+.info-modal{
+  position:fixed;
+  top:5%;
+  left:50%;
+  transform:translateX(-50%);
+
+  width:92%;
+  max-width:760px;
+  max-height:90vh;
+
+  background:white;
+  border-radius:18px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+
+  display:flex;
+  flex-direction:column;
+  z-index:2000;
+}
+
+.info-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:14px 18px;
+  border-bottom:1px solid #CBD5E1;
+}
+
+.info-body{
+  padding:18px;
+  overflow-y:auto;
+  font-size:.97rem;
+}
+
+.info-footer{
+  margin-top:16px;
+  padding:12px;
+  background:#F1F5F9;
+  border-radius:12px;
+  font-weight:600;
+}
+
+.close{
+  background:none;
+  border:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* EI NÄKYVIIN MOBIILISSA */
+@media(max-width:768px){
+  .info-btn{display:none!important}
+}
+/* Info-ikkunan sulje aina näkyvissä */
+.info-modal {
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.info-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #CBD5E1;
+}
+
+.info-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.info-header .close {
+  background: #0B3A6F;
+  color: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 

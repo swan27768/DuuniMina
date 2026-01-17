@@ -5,10 +5,14 @@
 // Varmistukset: jos nämä puuttuvat, renderöinti katkeaa muuten hiljaa.
 function assertGlobals() {
   const missing = [];
-  if (typeof window.TOTAL_QUESTIONS === "undefined") missing.push("TOTAL_QUESTIONS");
-  if (typeof window.calculateDuuniMina !== "function") missing.push("calculateDuuniMina()");
-  if (typeof window.TYPE_PROFILES === "undefined") missing.push("TYPE_PROFILES");
-  if (typeof window.buildInterpretation !== "function") missing.push("buildInterpretation()");
+  if (typeof window.TOTAL_QUESTIONS === "undefined")
+    missing.push("TOTAL_QUESTIONS");
+  if (typeof window.calculateDuuniMina !== "function")
+    missing.push("calculateDuuniMina()");
+  if (typeof window.TYPE_PROFILES === "undefined")
+    missing.push("TYPE_PROFILES");
+  if (typeof window.buildInterpretation !== "function")
+    missing.push("buildInterpretation()");
   if (missing.length) {
     throw new Error("Puuttuvat globaalit: " + missing.join(", "));
   }
@@ -57,7 +61,7 @@ const QUESTIONS = [
   "Tykkään ottaa vastuuta.",
   "Pidän järjestyksestä.",
   "Haluan, että tekemisellä on näkyvä vaikutus.",
-  "Teen mieluummin käytännön hommia kuin pelkkää puhetta."
+  "Teen mieluummin käytännön hommia kuin pelkkää puhetta.",
 ];
 
 let answers = {};
@@ -65,13 +69,15 @@ let motiveSeed = null;
 let current = 0; // 0 = seed-näkymä, 1..TOTAL_QUESTIONS = väittämät
 
 function startTest() {
+  document.getElementById("infoBtn").style.display = "none";
+
   try {
     assertGlobals();
 
     // Turvacheck: kysymysmäärän synkka
     if (QUESTIONS.length !== window.TOTAL_QUESTIONS) {
       throw new Error(
-        `QUESTIONS.length (${QUESTIONS.length}) != TOTAL_QUESTIONS (${window.TOTAL_QUESTIONS}).`
+        `QUESTIONS.length (${QUESTIONS.length}) != TOTAL_QUESTIONS (${window.TOTAL_QUESTIONS}).`,
       );
     }
 
@@ -120,7 +126,6 @@ function showSeed() {
   `;
 }
 
-
 function setSeed(m) {
   motiveSeed = m;
   current = 1;
@@ -143,7 +148,9 @@ function showQuestion() {
 
     if (!text) {
       // Tämä estää “viimeinen kysymys undefined -> jumi”
-      throw new Error(`Kysymysteksti puuttuu indeksistä ${idx} (current=${current}).`);
+      throw new Error(
+        `Kysymysteksti puuttuu indeksistä ${idx} (current=${current}).`,
+      );
     }
 
     const test = document.getElementById("test");
@@ -191,6 +198,8 @@ function answer(v) {
 
 // Tulos
 function showResult() {
+  document.getElementById("infoBtn").style.display = "none";
+
   try {
     const result = window.calculateDuuniMina(answers, motiveSeed);
 
@@ -199,8 +208,13 @@ function showResult() {
       throw new Error(`TYPE_PROFILES ei sisällä avainta: "${result.primary}"`);
     }
 
-    const secondary = result.secondary ? window.TYPE_PROFILES[result.secondary] : null;
-    const interpretation = window.buildInterpretation(result.primary, result.secondary);
+    const secondary = result.secondary
+      ? window.TYPE_PROFILES[result.secondary]
+      : null;
+    const interpretation = window.buildInterpretation(
+      result.primary,
+      result.secondary,
+    );
 
     document.getElementById("test").classList.add("hidden");
     const box = document.getElementById("result");
@@ -218,17 +232,24 @@ function showResult() {
         <p class="lead">${main.lead}</p>
         <p>${main.meaning}</p>
 
-        ${secondary ? `
+        ${
+          secondary
+            ? `
           <hr>
           <h3>Toinen vahvuutesi: ${secondary.title}</h3>
           <p class="lead">${secondary.lead}</p>
           <p>${secondary.meaning}</p>
-        ` : ""}
+        `
+            : ""
+        }
 
-        <div class="action-row no-print">
-          <button onclick="window.print()">Tulosta</button>
-          <button onclick="location.reload()">Aloita alusta</button>
-        </div>
+      <div class="action-row">
+        <button onclick="window.print()">Tulosta</button>
+        <button onclick="location.reload()">Aloita alusta</button>
+        <button class="info-circle desktop-only" aria-label="Teoreettinen tausta" onclick="openInfo()">i</button>
+            
+      </div>
+
 
       </div>
     `;
@@ -236,8 +257,160 @@ function showResult() {
     renderError(e);
   }
 }
+function openInfo() {
+  const box = document.createElement("div");
+  box.id = "teacherInfo";
+  box.innerHTML = `
+  <div class="info-modal">
 
+    <div class="info-header">
+      <h2>DuuniMinän tutkimuksellinen perusta</h2>
+      <button class="close" onclick="closeInfo()">×</button>
+    </div>
+
+    <div class="info-body">
+
+      <h3>1. Persoonallisuus – Big Five</h3>
+      <p>
+        DuuniMinän rakenne pohjautuu Big Five -malliin, joka on
+        kansainvälisesti tutkituin persoonallisuusteoria.
+        Ulottuvuudet on käännetty nuoren arkeen:
+      </p>
+
+      <ul>
+        <li>Agreeableness → Auttaa</li>
+        <li>Extraversion → Yhdistää / Vaikuttaa</li>
+        <li>Openness → Luoda</li>
+        <li>Conscientiousness → Ymmärtää / Turvata / Rakentaa</li>
+      </ul>
+
+      <h3>2. Ammatillinen suunta – Holland RIASEC</h3>
+      <p>
+        Hollandin teoria osoittaa, että ihmiset hakeutuvat
+        ammatteihin persoonallisten mieltymysten pohjalta.
+        DuuniMinä on tästä nuorisolähtöinen sovellus:
+      </p>
+
+      <ul>
+        <li>Social → Auttaa / Yhdistää</li>
+        <li>Enterprising → Vaikuttaa</li>
+        <li>Artistic → Luoda</li>
+        <li>Investigative → Ymmärtää</li>
+        <li>Realistic → Rakentaa</li>
+        <li>Conventional → Turvata</li>
+      </ul>
+
+      <h3>3. Sisäinen motivaatio – Deci & Ryan</h3>
+      <p>
+        Malli nojaa kolmeen perustarpeeseen:
+        autonomia, yhteys ja pystyvyys.
+        Siksi DuuniMinä puhuu motiiveista,
+        ei vain kiinnostuksista.
+      </p>
+
+      <h3>4. Nuoren kehitysvaihe</h3>
+      <p>
+        Työkalu tukee ammatillisen identiteetin rakentumista:
+        ei lukitse, vaan rohkaisee kokeilemaan.
+      </p>
+
+      <h3>5. Ohjauksellinen perusta</h3>
+      <p>
+        Sosio-kognitiivinen urateoria korostaa
+        minäkäsitystä ja pystyvyysuskomuksia.
+        DuuniMinä antaa nuorelle kielen,
+        jolla puhua itsestään realistisesti.
+      </p>
+
+      <div class="info-footer">
+        <strong>Ydinajatus:</strong><br>
+        DuuniMinä ei arvioi nuorta – se näyttää,
+        missä hän on luontaisesti vahva.
+      </div>
+
+    </div>
+  </div>`;
+  document.body.appendChild(box);
+}
+function openInfo() {
+  const box = document.createElement("div");
+  box.id = "teacherInfo";
+  box.innerHTML = `
+  <div class="info-modal">
+
+    <div class="info-header">
+      <h2>DuuniMinän tutkimuksellinen perusta</h2>
+      <button class="close" onclick="closeInfo()">×</button>
+    </div>
+
+    <div class="info-body">
+
+      <h3>1. Persoonallisuus – Big Five</h3>
+      <p>
+        DuuniMinän rakenne pohjautuu Big Five -malliin,
+        joka on kansainvälisesti tutkituin persoonallisuusteoria.
+      </p>
+
+      <ul>
+        <li>Agreeableness → Auttaa</li>
+        <li>Extraversion → Yhdistää / Vaikuttaa</li>
+        <li>Openness → Luoda</li>
+        <li>Conscientiousness → Ymmärtää / Turvata / Rakentaa</li>
+      </ul>
+
+      <h3>2. Ammatillinen suunta – Holland RIASEC</h3>
+      <ul>
+        <li>Social → Auttaa / Yhdistää</li>
+        <li>Enterprising → Vaikuttaa</li>
+        <li>Artistic → Luoda</li>
+        <li>Investigative → Ymmärtää</li>
+        <li>Realistic → Rakentaa</li>
+        <li>Conventional → Turvata</li>
+      </ul>
+
+      <h3>3. Sisäinen motivaatio – Deci & Ryan</h3>
+      <p>
+        Malli nojaa kolmeen perustarpeeseen:
+        autonomia, yhteys ja pystyvyys.
+      </p>
+
+      <h3>4. Nuoren kehitysvaihe</h3>
+      <p>
+        Työkalu tukee ammatillisen identiteetin rakentumista –
+        ei lukitse vaan rohkaisee kokeilemaan.
+      </p>
+
+      <h3>5. Ohjauksellinen perusta</h3>
+      <p>
+        Sosio-kognitiivinen urateoria korostaa minäkäsitystä
+        ja pystyvyysuskomuksia.
+      </p>
+
+      <div class="info-footer">
+        <strong>Ydinajatus:</strong><br>
+        DuuniMinä ei arvioi nuorta – se näyttää,
+        missä hän on luontaisesti vahva.
+      </div>
+
+    </div>
+  </div>`;
+  document.body.appendChild(box);
+}
+
+function closeInfo() {
+  const el = document.getElementById("teacherInfo");
+  if (el) el.remove();
+}
+
+function closeInfo() {
+  document.getElementById("teacherInfo")?.remove();
+}
 // Tee funktiot varmasti löydettäväksi inline-onclickeille
 window.startTest = startTest;
 window.setSeed = setSeed;
 window.answer = answer;
+
+window.onload = function () {
+  const btn = document.getElementById("infoBtn");
+  if (btn) btn.style.display = "block";
+};
